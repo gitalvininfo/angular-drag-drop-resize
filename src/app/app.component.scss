@@ -1,0 +1,43 @@
+p {
+    font-family: Lato;
+  }
+  
+  .control-image {
+    position: absolute;
+    background-color: white;
+    text-align: left;
+    cursor: move;
+  }
+  
+  .dragHandle {
+    position: absolute;
+    background-color: red;
+  }
+  
+  .dragHandle.rb {
+    width: 15px;
+    height: 15px;
+    cursor: nwse-resize;
+  }
+  
+  .dragHandle.right {
+    width: 15px;
+    height: 15px;
+    cursor: ew-resize;
+  }
+  
+  .dragHandle.bottom {
+    width: 15px;
+    height: 15px;
+    cursor: ns-resize;
+  }
+
+
+  .example-boundary {
+    width: 100%;
+    height: 100vh;
+    /* max-width: 100%; */
+    max-width: 1366px;
+    border: dotted #ccc 2px;
+    position: relative;
+  }
