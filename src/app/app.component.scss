@@ -3,7 +3,8 @@ p {
   }
   
   .control-image {
-    position: absolute;
+    // position: absolute;
+    position: relative;
     background-color: white;
     text-align: left;
     cursor: move;
@@ -12,9 +13,11 @@ p {
   .dragHandle {
     position: absolute;
     background-color: red;
+    left: 0;
   }
   
   .dragHandle.rb {
+    right: 0;
     width: 15px;
     height: 15px;
     cursor: nwse-resize;

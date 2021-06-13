@@ -10,7 +10,7 @@ import { CardControl } from "./card.model";
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  canResize = true;
+  dragDisabled = false;
 
   dragPosition;
 
@@ -66,6 +66,18 @@ export class AppComponent {
 
   }
 
+  addWatchlist(): void {
+    const templateControl = new Control();
+    templateControl.width = 200;
+    templateControl.height = 200;
+    templateControl.index = this.controls === undefined ? 0 : this.controls.length;
+
+    this.controls.push(templateControl);
+    this.selectedControl = templateControl;
+
+    this.setCreateHandleTransform();
+  }
+
   setCreateHandleTransform(): void {
     let rect: any = null;
     this.resizeBox!.changes.subscribe(() => {
@@ -106,10 +118,10 @@ export class AppComponent {
     const width = dragRect.left - targetRect.left + dragRect.width;
     const height = dragRect.top - targetRect.top + dragRect.height;
 
-    if (width > 200 || height > 200) {
-      this.canResize = false;
-      return;
-    }
+    // if (width > 200 || height > 200) {
+    //   this.dragDisabled = true;
+    //   return;
+    // }
 
     //this.selectedControl!.width = width;
     //this.selectedControl!.height = height;
@@ -122,8 +134,8 @@ export class AppComponent {
   dragEnd(event: CdkDragEnd) {
     // const { offsetHeight, offsetWidth } = event.source.element.nativeElement;
     let { x, y } = event.source.getFreeDragPosition();
-    this.dragPosition = { x: x, y: y };
-    localStorage.setItem("position", JSON.stringify(this.dragPosition));
+    // this.dragPosition = { x: x, y: y };
+    // localStorage.setItem("position", JSON.stringify(this.dragPosition));
   }
 
   clickControl(control: Control): void {

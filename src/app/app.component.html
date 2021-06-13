@@ -6,23 +6,25 @@
   <button (click)="addCard()">add card</button>
 </div>
 
-<div class="example-boundary2">
-  <div *ngFor="let control of controls; let i = index" #resizeBox class="control-image" cdkDrag
-    cdkDragBoundary=".example-boundary" 
-    [style.width.px]="control.width" 
-    [style.height.px]="control.height"
-    [cdkDragFreeDragPosition]="dragPosition"
-    
-    (click)="clickControl(control)" 
-    (cdkDragEnded)="dragEnd($event)">
+<div>
+  <button (click)="addWatchlist()">add watchlist</button>
+</div>
 
-    <span #dragHandleRB cdkDragLockAxis="'x'" class="dragHandle rb" cdkDrag
-      (cdkDragMoved)="dragMove(dragHandleRB, $event, control)" (cdkDragEnded)="dragEnd($event)"></span>
-    <!-- <span #dragHandleBottom cdkDragLockAxis="y" class="dragHandle bottom" cdkDrag
+<div class="example-boundary2">
+  <div class="container2" style="position: relative;">
+    <div *ngFor="let control of controls; let i = index" #resizeBox class="control-image" cdkDrag
+      cdkDragBoundary=".example-boundary" [style.width.px]="control.width" [style.height.px]="control.height"
+      [cdkDragFreeDragPosition]="dragPosition" (click)="clickControl(control)" (cdkDragEnded)="dragEnd($event)">
+      <small>Test</small>
+
+      <span #dragHandleRB cdkDragLockAxis="lockAxis" class="dragHandle rb" cdkDrag
+        (cdkDragMoved)="dragMove(dragHandleRB, $event, control)" (cdkDragEnded)="dragEnd($event)"></span>
+      <!-- <span #dragHandleBottom cdkDragLockAxis="y" class="dragHandle bottom" cdkDrag
       (cdkDragMoved)="dragMove(dragHandleBottom, $event, control)" (cdkDragEnded)="dragEnd($event)"></span>
     <span #dragHandleRight cdkDragLockAxis="x" class="dragHandle right" cdkDrag
       (cdkDragMoved)="dragMove(dragHandleRight, $event, control)" (cdkDragEnded)="dragEnd($event)"></span> -->
 
+    </div>
   </div>
 
 
