@@ -15,7 +15,8 @@
     <div *ngFor="let control of controls; let i = index" #resizeBox class="control-image" cdkDrag
       cdkDragBoundary=".example-boundary" [style.width.px]="control.width" [style.height.px]="control.height"
       [cdkDragFreeDragPosition]="dragPosition" (click)="clickControl(control)" (cdkDragEnded)="dragEnd($event)">
-      <small>Test</small>
+     
+      <h1>{{i}}</h1>
 
       <span #dragHandleRB cdkDragLockAxis="lockAxis" class="dragHandle rb" cdkDrag
         (cdkDragMoved)="dragMove(dragHandleRB, $event, control)" (cdkDragEnded)="dragEnd($event)"></span>

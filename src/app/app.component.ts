@@ -83,6 +83,8 @@ export class AppComponent {
     this.resizeBox!.changes.subscribe(() => {
       rect = this.resizeBox!.filter((element, index) => index === this.selectedControl!.index!)[0].nativeElement.getBoundingClientRect();
 
+      console.warn(this.dragHandleRB)
+
       this.dragHandleRB!.changes.subscribe(() => {
         this.setHandleTransform(this.dragHandleRB!.filter((element, index) => index === this.selectedControl!.index!)[0].nativeElement, rect, 'both');
       });
