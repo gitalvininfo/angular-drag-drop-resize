@@ -26,19 +26,11 @@
 
       <!-- cdkDropListSortingDisabled="true" -->
 
-
-
-
-
-
-
-
-
       <div *ngFor="let control of controls; let i = index" #resizeBox class="control-image example-box" cdkDrag
         cdkDragBoundary=".example-boundary" [style.width.px]="control.width" [style.height.px]="control.height"
         [cdkDragFreeDragPosition]="control.dragFreePosition" (click)="clickControl(control)"
         (cdkDragEnded)="dragEnd($event, control)">
-
+      {{dragPosition | json}}
         <p>Card Type: {{control.cardType}}</p>
         <p>Width: {{control.width}}</p>
         <p>Height: {{control.height}}</p>

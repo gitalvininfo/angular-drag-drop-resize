@@ -39,7 +39,7 @@ export class AppComponent {
       const position = JSON.parse(localStorage.getItem('position'));
       const defaultPosition = { x: 0, y: 0 }
       this.dragPosition = (position) ? position : defaultPosition;
-
+      
 
       const cards = JSON.parse(localStorage.getItem('controls'));
 
@@ -51,16 +51,17 @@ export class AppComponent {
   }
 
 
+  counter = 0;
   addWatchlist(type: string): void {
     const templateControl = new Control();
-    templateControl.width = (type === 'watchlist') ? 200 : 500;
-    templateControl.height = 200;
+    templateControl.width = (type === 'watchlist') ? 454 : 500;
+    templateControl.height = 349;
     templateControl.xAxis = 0;
     templateControl.yAxis = 0;
     templateControl.cardType = type;
     templateControl.dragFreePosition = {
-      x: 0,
-      y: 0
+      x: 50,
+      y: 50
     }
 
     templateControl.index = this.controls === undefined ? 0 : this.controls.length;
@@ -107,7 +108,10 @@ export class AppComponent {
     // console.warn(dragRect);
     // console.log(targetRect);
 
-    console.log(this.selectedControl)
+    
+    console.log(this.selectedControl);
+
+    // console.log('&&&', this.selectedControl)
 
     //this.selectedControl!.width = dragRect.left - targetRect.left + dragRect.width;
     //this.selectedControl!.height = dragRect.top - targetRect.top + dragRect.height;
@@ -144,7 +148,7 @@ export class AppComponent {
     }
 
 
-    console.warn(this.controls)
+    // console.warn(this.controls)
 
     localStorage.setItem("controls", JSON.stringify(this.controls));
 
