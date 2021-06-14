@@ -36,10 +36,10 @@ export class AppComponent {
 
   ngOnInit(): void {
     try {
-      const position = JSON.parse(localStorage.getItem('position'));
-      const defaultPosition = { x: 0, y: 0 }
-      this.dragPosition = (position) ? position : defaultPosition;
-      
+      // const position = JSON.parse(localStorage.getItem('position'));
+      // const defaultPosition = { x: 0, y: 0 }
+      // this.dragPosition = (position) ? position : defaultPosition;
+
 
       const cards = JSON.parse(localStorage.getItem('controls'));
 
@@ -60,8 +60,8 @@ export class AppComponent {
     templateControl.yAxis = 0;
     templateControl.cardType = type;
     templateControl.dragFreePosition = {
-      x: 50,
-      y: 50
+      x: 0,
+      y: 0
     }
 
     templateControl.index = this.controls === undefined ? 0 : this.controls.length;
@@ -100,16 +100,12 @@ export class AppComponent {
   }
 
   resize(dragHandle: HTMLElement, target: HTMLElement): void {
-
-
     const dragRect = dragHandle.getBoundingClientRect();
     const targetRect = target.getBoundingClientRect();
 
-    // console.warn(dragRect);
-    // console.log(targetRect);
-
-    
-    console.log(this.selectedControl);
+    console.warn(dragRect);
+    console.log(targetRect);
+    // console.log(this.selectedControl);
 
     // console.log('&&&', this.selectedControl)
 
@@ -132,9 +128,41 @@ export class AppComponent {
     this.setUpdateHandleTransform();
   }
 
+
+  dragger(control: Control) {
+    let i = control.index;
+    let aw: HTMLElement = this.resizeBox!.filter((element, index) => index === control.index!)[0].nativeElement;
+    this.controls[i].width = aw.getBoundingClientRect().width;
+    this.controls[i].height = aw.getBoundingClientRect().height;
+    localStorage.setItem("controls", JSON.stringify(this.controls));
+
+  }
+
   dragEnd(event: CdkDragEnd, control: Control) {
     let aw: HTMLElement = this.resizeBox!.filter((element, index) => index === control.index!)[0].nativeElement;
-    console.log(aw.getBoundingClientRect());
+
+    // console.warn({
+    //   freedrag: event.source.getFreeDragPosition(),
+    //   distance: event.distance,
+    //   droppoint: event.dropPoint,
+    // })
+    
+
+    console.log(aw.style.transform)
+
+    // console.log(aw.style.getPropertyValue('transform'))
+
+    // const offset = { ...(<any>event.source._dragRef)._passiveTransform };
+
+    // const axisX = this.initialPosition.x + this.offset.x;
+    // this.position.y = this.initialPosition.y + this.offset.y;
+
+    // console.log(this.position, this.initialPosition, this.offset);
+    // console.log(aw.getBoundingClientRect())
+
+    // console.log(offset)
+
+
     let i = control.index;
     // const { offsetHeight, offsetWidth } = event.source.element.nativeElement;
     let { x, y } = event.source.getFreeDragPosition();
@@ -162,7 +190,7 @@ export class AppComponent {
 
 
   setUpdateHandleTransform(): void {
-    console.log('exppanding....')
+    // console.log('exppanding....')
     const rect = this.resizeBox!.filter((element, index) => index === this.selectedControl!.index!)[0].nativeElement.getBoundingClientRect();
     // this.setHandleTransform(this.dragHandleBottom!.filter((element, index) => index === this.selectedControl!.index!)[0].nativeElement, rect, 'y');
     this.setHandleTransform(this.dragHandleRB!.filter((element, index) => index === this.selectedControl!.index!)[0].nativeElement, rect, 'both');
@@ -184,6 +212,7 @@ export class AppComponent {
     // }
 
     if (position === 'both') {
+      // console.warn('transformmm....', translateX, translateY)
       dragHandle.style.transform = `translate3d(${translateX}px, ${translateY}px, 0)`;
     }
   }

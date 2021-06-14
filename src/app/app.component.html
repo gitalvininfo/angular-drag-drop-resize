@@ -30,17 +30,18 @@
         cdkDragBoundary=".example-boundary" [style.width.px]="control.width" [style.height.px]="control.height"
         [cdkDragFreeDragPosition]="control.dragFreePosition" (click)="clickControl(control)"
         (cdkDragEnded)="dragEnd($event, control)">
-      {{dragPosition | json}}
+        <!-- {{dragPosition | json}} -->
         <p>Card Type: {{control.cardType}}</p>
         <p>Width: {{control.width}}</p>
-        <p>Height: {{control.height}}</p>
+        <p>Height: {{control.height}}</p> 
         <p>XAxis: {{control.xAxis}}</p>
         <p>YAxis: {{control.yAxis}}</p>
         <p>Drag Free: {{control.dragFreePosition | json}}</p>
         <p>Index: {{control.index}}</p>
 
-        <span #dragHandleRB cdkDragLockAxis="lockAxis" class="dragHandle rb" cdkDrag
-          (cdkDragMoved)="dragMove(dragHandleRB, $event, control)" (cdkDragEnded)="dragEnd($event, control)"></span>
+
+        <span #dragHandleRB cdkDragLockAxis="lockAxis" class="dragHandle" cdkDrag
+        (cdkDragMoved)="dragMove(dragHandleRB, $event, control)" (cdkDragEnded)="dragger(control)"></span>
         <!-- <span #dragHandleBottom cdkDragLockAxis="y" class="dragHandle bottom" cdkDrag
       (cdkDragMoved)="dragMove(dragHandleBottom, $event, control)" (cdkDragEnded)="dragEnd($event)"></span>
     <span #dragHandleRight cdkDragLockAxis="x" class="dragHandle right" cdkDrag
