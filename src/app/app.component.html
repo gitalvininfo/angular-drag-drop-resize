@@ -31,13 +31,13 @@
         [cdkDragFreeDragPosition]="control.dragFreePosition" (click)="clickControl(control)"
         (cdkDragEnded)="dragEnd($event, control)">
         <!-- {{dragPosition | json}} -->
-        <!-- <p>Card Type: {{control.cardType}}</p>
+        <p>Card Type: {{control.cardType}}</p>
         <p>Width: {{control.width}}</p>
         <p>Height: {{control.height}}</p>
         <p>XAxis: {{control.xAxis}}</p>
         <p>YAxis: {{control.yAxis}}</p>
         <p>Drag Free: {{control.dragFreePosition | json}}</p>
-        <p>Index: {{control.index}}</p> -->
+        <p>Index: {{control.index}}</p>
 
 
         <span #dragHandleRB cdkDragLockAxis="lockAxis" class="dragHandle" cdkDrag
