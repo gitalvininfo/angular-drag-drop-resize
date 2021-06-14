@@ -4,8 +4,10 @@ p {
   
   .control-image {
     position: absolute;
-    text-align: left;
+    // text-align: left;
     cursor: move;
+    max-width: 300px;
+    max-height: 300px;
   }
   
   .dragHandle {

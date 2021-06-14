@@ -54,8 +54,8 @@ export class AppComponent {
   counter = 0;
   addWatchlist(type: string): void {
     const templateControl = new Control();
-    templateControl.width = (type === 'watchlist') ? 454 : 500;
-    templateControl.height = 349;
+    templateControl.width = (type === 'watchlist') ? 200 : 500;
+    templateControl.height = 200;
     templateControl.xAxis = 0;
     templateControl.yAxis = 0;
     templateControl.cardType = type;
@@ -103,8 +103,8 @@ export class AppComponent {
     const dragRect = dragHandle.getBoundingClientRect();
     const targetRect = target.getBoundingClientRect();
 
-    console.warn(dragRect);
-    console.log(targetRect);
+    // console.warn(dragRect);
+    // console.log(targetRect);
     // console.log(this.selectedControl);
 
     // console.log('&&&', this.selectedControl)
@@ -148,7 +148,7 @@ export class AppComponent {
     // })
     
 
-    console.log(aw.style.transform)
+    // console.log(aw.style.transform)
 
     // console.log(aw.style.getPropertyValue('transform'))
 
