@@ -14,33 +14,53 @@
 
 <p *ngIf="controls">Number of Cards: {{controls?.length}}</p>
 
-<div class="example-boundary">
-  <div class="container2" style="position: relative;">
-    <div *ngFor="let control of controls; let i = index" #resizeBox class="control-image example-box" cdkDrag
-      cdkDragBoundary=".example-boundary" [style.width.px]="control.width" [style.height.px]="control.height"
-      [cdkDragFreeDragPosition]="dragPosition" (click)="clickControl(control)"
-      (cdkDragEnded)="dragEnd($event, control)">
+<div style="width: 100%; display: flex;">
+  <!-- <p>Sidebar</p> -->
+  <!-- cdkDropListSortingDisabled="true" -->
 
-      <p>Card Type: {{control.cardType}}</p>
-      <p>Width: {{control.width}}</p>
-      <p>Height: {{control.height}}</p>
-      <p>XAxis: {{control.xAxis}}</p>
-      <p>YAxis: {{control.yAxis}}</p>
-      <p>Index: {{control.index}}</p>
+  <div style="width: 20%;" 
+    cdkDropList
+    #todoList="cdkDropList" 
+    cdkDropListSortingDisabled="true"
+    
+    >
+    <div *ngFor="let c of sidebarCards" style="height: 150px; width: 150px; padding: 8px; margin: 8px;"
+      class="example-box" cdkDrag
+      (cdkDragDropped)="onDropList($event)"
+      >
+      <div class="example-custom-placeholder" *cdkDragPlaceholder></div>
 
-      <span #dragHandleRB cdkDragLockAxis="lockAxis" class="dragHandle rb" cdkDrag
-        (cdkDragMoved)="dragMove(dragHandleRB, $event, control)" (cdkDragEnded)="dragEnd($event, control)"></span>
-      <!-- <span #dragHandleBottom cdkDragLockAxis="y" class="dragHandle bottom" cdkDrag
+      {{c.cardType}}
+    </div>
+  </div>
+
+  <div class="example-boundary">
+    <div class="container2" style="position: relative;"
+      
+        >
+
+      <div *ngFor="let control of controls; let i = index" #resizeBox class="control-image example-box" cdkDrag
+      cdkDragBoundary=".example-boundary"
+         [style.width.px]="control.width" [style.height.px]="control.height"
+        [cdkDragFreeDragPosition]="dragPosition" (click)="clickControl(control)"
+        (cdkDragEnded)="dragEnd($event, control)">
+
+        <p>Card Type: {{control.cardType}}</p>
+        <p>Width: {{control.width}}</p>
+        <p>Height: {{control.height}}</p>
+        <p>XAxis: {{control.xAxis}}</p>
+        <p>YAxis: {{control.yAxis}}</p>
+        <p>Index: {{control.index}}</p>
+
+        <span #dragHandleRB cdkDragLockAxis="lockAxis" class="dragHandle rb" cdkDrag
+          (cdkDragMoved)="dragMove(dragHandleRB, $event, control)" (cdkDragEnded)="dragEnd($event, control)"></span>
+        <!-- <span #dragHandleBottom cdkDragLockAxis="y" class="dragHandle bottom" cdkDrag
       (cdkDragMoved)="dragMove(dragHandleBottom, $event, control)" (cdkDragEnded)="dragEnd($event)"></span>
     <span #dragHandleRight cdkDragLockAxis="x" class="dragHandle right" cdkDrag
       (cdkDragMoved)="dragMove(dragHandleRight, $event, control)" (cdkDragEnded)="dragEnd($event)"></span> -->
 
+      </div>
     </div>
   </div>
 
-
-  <!-- <div *ngFor="let c of cardControls; let i = index" #resizeBox class="control-image" cdkDrag
-    cdkDragBoundary=".example-boundary" [style.width.px]="c.width" [style.height.px]="c.height">
-
-  </div> -->
 </div>

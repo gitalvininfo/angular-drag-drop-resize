@@ -1,4 +1,4 @@
-import { CdkDragEnd, CdkDragMove } from '@angular/cdk/drag-drop';
+import { CdkDragDrop, CdkDragEnd, CdkDragMove, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { Component, ElementRef, NgZone, QueryList, ViewChildren } from '@angular/core';
 import { Control, IControl } from './control.model';
 import { CardControl } from "./card.model";
@@ -11,6 +11,14 @@ import { CardControl } from "./card.model";
 })
 export class AppComponent {
   dragDisabled = false;
+
+  test
+
+  sidebarCards: Control[] = [
+    { width: 200, height: 200, index: 0, xAxis: 1, yAxis: 1, cardType: "watchlist" },
+    { width: 200, height: 200, index: 1, xAxis: 2, yAxis: 2, cardType: "open entries table" },
+    { width: 200, height: 200, index: 2, xAxis: 3, yAxis: 3, cardType: "strategies" }
+  ];
 
   dragPosition;
 
@@ -64,14 +72,14 @@ export class AppComponent {
 
   addWatchlist(type: string): void {
     const templateControl = new Control();
-    templateControl.width = (type === 'watchlist') ? 200: 500;
+    templateControl.width = (type === 'watchlist') ? 200 : 500;
     templateControl.height = 200;
     templateControl.xAxis = 0;
     templateControl.yAxis = 0;
     templateControl.cardType = type;
     templateControl.index = this.controls === undefined ? 0 : this.controls.length;
 
-    this.controls.push(templateControl);    
+    this.controls.push(templateControl);
     this.selectedControl = templateControl;
     this.setCreateHandleTransform();
   }
@@ -184,5 +192,26 @@ export class AppComponent {
     }
   }
 
+
+  onDropList(event: CdkDragDrop<any[]>) {
+    // console.log('drop list', event.source.)
+    this.addWatchlist('watchlist')
+
+    const rect=event.item.element.nativeElement.getBoundingClientRect()
+    console.log(rect)
+
+    // if (event.previousContainer === event.container) {
+    //   moveItemInArray(event.container.data,
+    //     event.previousIndex,
+    //     event.currentIndex);
+    //     console.log('move item')
+    // } else {
+    //   transferArrayItem(event.previousContainer.data,
+    //     event.container.data,
+    //     event.previousIndex, event.currentIndex);
+    //     console.log('transfer item')
+
+    // }
+  }
 
 }
