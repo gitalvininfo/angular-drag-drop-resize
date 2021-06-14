@@ -39,41 +39,41 @@ export class AppComponent {
   }
 
 
-  addControl(): void {
-    const templateControl = new Control();
-    templateControl.width = 40;
-    templateControl.height = 40;
-    templateControl.index = this.controls === undefined ? 0 : this.controls.length;
+  // addControl(): void {
+  //   const templateControl = new Control();
+  //   templateControl.width = 40;
+  //   templateControl.height = 40;
+  //   templateControl.index = this.controls === undefined ? 0 : this.controls.length;
+  //   console.log(templateControl);
+  //   this.selectedControl = templateControl;
 
-    this.controls.push(templateControl);
-    this.selectedControl = templateControl;
-
-    this.setCreateHandleTransform();
-  }
+  //   this.setCreateHandleTransform();
+  // }
 
 
-  addCard(): void {
-    const templateCard = new CardControl();
-    templateCard.width = 100;
-    templateCard.height = 100;
-    templateCard.index = this.cardControls === undefined ? 0 : this.cardControls.length;
+  // addCard(): void {
+  //   const templateCard = new CardControl();
+  //   templateCard.width = 100;
+  //   templateCard.height = 100;
+  //   templateCard.index = this.cardControls === undefined ? 0 : this.cardControls.length;
 
-    this.controls.push(templateCard);
+  //   this.controls.push(templateCard);
+  //   console.log(templateCard);
 
-    // this.cardControls.push(templateCard);
-
-    console.log(templateCard);
-
-  }
+  // }
 
   addWatchlist(): void {
     const templateControl = new Control();
     templateControl.width = 200;
     templateControl.height = 200;
+    templateControl.xAxis = 0;
+    templateControl.yAxis = 0;
     templateControl.index = this.controls === undefined ? 0 : this.controls.length;
 
     this.controls.push(templateControl);
+    
     this.selectedControl = templateControl;
+    // console.log(templateControl);
 
     this.setCreateHandleTransform();
   }
@@ -83,7 +83,7 @@ export class AppComponent {
     this.resizeBox!.changes.subscribe(() => {
       rect = this.resizeBox!.filter((element, index) => index === this.selectedControl!.index!)[0].nativeElement.getBoundingClientRect();
 
-      console.warn(this.dragHandleRB)
+      // console.warn(this.dragHandleRB)
 
       this.dragHandleRB!.changes.subscribe(() => {
         this.setHandleTransform(this.dragHandleRB!.filter((element, index) => index === this.selectedControl!.index!)[0].nativeElement, rect, 'both');
@@ -108,11 +108,14 @@ export class AppComponent {
 
   resize(dragHandle: HTMLElement, target: HTMLElement): void {
 
+
     const dragRect = dragHandle.getBoundingClientRect();
     const targetRect = target.getBoundingClientRect();
 
     // console.warn(dragRect);
     // console.log(targetRect);
+
+    console.log(this.selectedControl)
 
     //this.selectedControl!.width = dragRect.left - targetRect.left + dragRect.width;
     //this.selectedControl!.height = dragRect.top - targetRect.top + dragRect.height;
@@ -133,9 +136,20 @@ export class AppComponent {
     this.setUpdateHandleTransform();
   }
 
-  dragEnd(event: CdkDragEnd) {
+  dragEnd(event: CdkDragEnd, control: Control) {
+    // console.log('end expand', event.source.getFreeDragPosition())
+    // console.warn(this.selectedControl)
+    let aw: HTMLElement = this.resizeBox!.filter((element, index) => index === control.index!)[0].nativeElement;
+    console.log(aw.getBoundingClientRect());
+    let i = control.index;
     // const { offsetHeight, offsetWidth } = event.source.element.nativeElement;
     let { x, y } = event.source.getFreeDragPosition();
+    this.controls[i].xAxis = x;
+    this.controls[i].yAxis = y;
+    this.controls[i].width = aw.getBoundingClientRect().width;
+    this.controls[i].height = aw.getBoundingClientRect().height;
+
+
     // this.dragPosition = { x: x, y: y };
     // localStorage.setItem("position", JSON.stringify(this.dragPosition));
   }
