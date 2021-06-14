@@ -1,7 +1,7 @@
-import { CdkDragDrop, CdkDragEnd, CdkDragMove, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
+import { CdkDragDrop, CdkDragEnd, CdkDragMove } from '@angular/cdk/drag-drop';
 import { Component, ElementRef, NgZone, QueryList, ViewChildren } from '@angular/core';
-import { Control, IControl } from './control.model';
 import { CardControl } from "./card.model";
+import { Control } from './control.model';
 
 
 @Component({
@@ -11,8 +11,6 @@ import { CardControl } from "./card.model";
 })
 export class AppComponent {
   dragDisabled = false;
-
-  test
 
   sidebarCards: Control[] = [
     { width: 200, height: 200, index: 0, xAxis: 1, yAxis: 1, cardType: "watchlist" },
@@ -32,7 +30,7 @@ export class AppComponent {
   // @ViewChildren('dragHandleBottom') dragHandleBottom?: QueryList<ElementRef>;
 
   constructor(private zone: NgZone) {
-    this.controls = [];
+    // this.controls = [];
     this.cardControls = [];
   }
 
@@ -41,34 +39,17 @@ export class AppComponent {
       const position = JSON.parse(localStorage.getItem('position'));
       const defaultPosition = { x: 0, y: 0 }
       this.dragPosition = (position) ? position : defaultPosition;
+
+
+      const cards = JSON.parse(localStorage.getItem('controls'));
+
+      this.controls = (cards) ? cards : [];
+
     } catch (e) {
 
     }
   }
 
-
-  // addControl(): void {
-  //   const templateControl = new Control();
-  //   templateControl.width = 40;
-  //   templateControl.height = 40;
-  //   templateControl.index = this.controls === undefined ? 0 : this.controls.length;
-  //   console.log(templateControl);
-  //   this.selectedControl = templateControl;
-
-  //   this.setCreateHandleTransform();
-  // }
-
-
-  // addCard(): void {
-  //   const templateCard = new CardControl();
-  //   templateCard.width = 100;
-  //   templateCard.height = 100;
-  //   templateCard.index = this.cardControls === undefined ? 0 : this.cardControls.length;
-
-  //   this.controls.push(templateCard);
-  //   console.log(templateCard);
-
-  // }
 
   addWatchlist(type: string): void {
     const templateControl = new Control();
@@ -77,6 +58,11 @@ export class AppComponent {
     templateControl.xAxis = 0;
     templateControl.yAxis = 0;
     templateControl.cardType = type;
+    templateControl.dragFreePosition = {
+      x: 0,
+      y: 0
+    }
+
     templateControl.index = this.controls === undefined ? 0 : this.controls.length;
 
     this.controls.push(templateControl);
@@ -143,8 +129,6 @@ export class AppComponent {
   }
 
   dragEnd(event: CdkDragEnd, control: Control) {
-    // console.log('end expand', event.source.getFreeDragPosition())
-    // console.warn(this.selectedControl)
     let aw: HTMLElement = this.resizeBox!.filter((element, index) => index === control.index!)[0].nativeElement;
     console.log(aw.getBoundingClientRect());
     let i = control.index;
@@ -154,7 +138,15 @@ export class AppComponent {
     this.controls[i].yAxis = y;
     this.controls[i].width = aw.getBoundingClientRect().width;
     this.controls[i].height = aw.getBoundingClientRect().height;
+    this.controls[i].dragFreePosition = {
+      x: x,
+      y: y
+    }
 
+
+    console.warn(this.controls)
+
+    localStorage.setItem("controls", JSON.stringify(this.controls));
 
     // this.dragPosition = { x: x, y: y };
     // localStorage.setItem("position", JSON.stringify(this.dragPosition));
@@ -194,24 +186,7 @@ export class AppComponent {
 
 
   onDropList(event: CdkDragDrop<any[]>) {
-    // console.log('drop list', event.source.)
     this.addWatchlist('watchlist')
-
-    const rect=event.item.element.nativeElement.getBoundingClientRect()
-    console.log(rect)
-
-    // if (event.previousContainer === event.container) {
-    //   moveItemInArray(event.container.data,
-    //     event.previousIndex,
-    //     event.currentIndex);
-    //     console.log('move item')
-    // } else {
-    //   transferArrayItem(event.previousContainer.data,
-    //     event.container.data,
-    //     event.previousIndex, event.currentIndex);
-    //     console.log('transfer item')
-
-    // }
   }
 
 }
