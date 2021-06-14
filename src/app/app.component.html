@@ -6,18 +6,22 @@
   <button (click)="addCard()">add card</button>
 </div> -->
 
-<div>
-  <button (click)="addWatchlist()">add watchlist</button>
+<div style="display: flex;">
+  <button (click)="addWatchlist('watchlist')">add watchlist</button>
+  <button (click)="addWatchlist('open entries table')">add open entries table</button>
+
 </div>
 
 <p *ngIf="controls">Number of Cards: {{controls?.length}}</p>
 
-<div class="example-boundary2">
+<div class="example-boundary">
   <div class="container2" style="position: relative;">
-    <div *ngFor="let control of controls; let i = index" #resizeBox class="control-image" cdkDrag
+    <div *ngFor="let control of controls; let i = index" #resizeBox class="control-image example-box" cdkDrag
       cdkDragBoundary=".example-boundary" [style.width.px]="control.width" [style.height.px]="control.height"
-      [cdkDragFreeDragPosition]="dragPosition" (click)="clickControl(control)" (cdkDragEnded)="dragEnd($event, control)">
-     
+      [cdkDragFreeDragPosition]="dragPosition" (click)="clickControl(control)"
+      (cdkDragEnded)="dragEnd($event, control)">
+
+      <p>Card Type: {{control.cardType}}</p>
       <p>Width: {{control.width}}</p>
       <p>Height: {{control.height}}</p>
       <p>XAxis: {{control.xAxis}}</p>

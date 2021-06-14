@@ -4,6 +4,7 @@ export interface IControl{
     index?: number;
     xAxis?: number;
     yAxis?: number;
+    cardType?: string;
   }
   
   export class Control implements IControl{
@@ -13,5 +14,6 @@ export interface IControl{
       public index?: number,
       public xAxis?: number,
       public yAxis?: number,
+      public cardType?: string
     ){}
   }

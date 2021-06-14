@@ -62,19 +62,17 @@ export class AppComponent {
 
   // }
 
-  addWatchlist(): void {
+  addWatchlist(type: string): void {
     const templateControl = new Control();
-    templateControl.width = 200;
+    templateControl.width = (type === 'watchlist') ? 200: 500;
     templateControl.height = 200;
     templateControl.xAxis = 0;
     templateControl.yAxis = 0;
+    templateControl.cardType = type;
     templateControl.index = this.controls === undefined ? 0 : this.controls.length;
 
-    this.controls.push(templateControl);
-    
+    this.controls.push(templateControl);    
     this.selectedControl = templateControl;
-    // console.log(templateControl);
-
     this.setCreateHandleTransform();
   }
 
