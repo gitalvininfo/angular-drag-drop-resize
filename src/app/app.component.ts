@@ -109,7 +109,10 @@ export class AppComponent {
     // console.log(targetRect);
 
     
-    console.log(this.selectedControl);
+    console.log(this.selectedControl.xAxis);
+    this.controls[this.selectedControl.index].xAxis = this.selectedControl.xAxis
+    this.controls[this.selectedControl.index].yAxis = this.selectedControl.yAxis
+
 
     // console.log('&&&', this.selectedControl)
 
