@@ -1,5 +1,5 @@
 import { CdkDragDrop, CdkDragEnd, CdkDragMove } from '@angular/cdk/drag-drop';
-import { Component, ElementRef, NgZone, QueryList, ViewChildren } from '@angular/core';
+import { Component, ElementRef, HostListener, NgZone, QueryList, ViewChildren } from '@angular/core';
 import { CardControl } from "./card.model";
 import { Control } from './control.model';
 
@@ -15,7 +15,8 @@ export class AppComponent {
   sidebarCards: Control[] = [
     { width: 200, height: 200, index: 0, xAxis: 1, yAxis: 1, cardType: "watchlist" },
     { width: 200, height: 200, index: 1, xAxis: 2, yAxis: 2, cardType: "open entries table" },
-    { width: 200, height: 200, index: 2, xAxis: 3, yAxis: 3, cardType: "strategies" }
+    { width: 200, height: 200, index: 2, xAxis: 3, yAxis: 3, cardType: "trade-performance-chart" },
+    { width: 200, height: 200, index: 3, xAxis: 3, yAxis: 4, cardType: "strategies" },
   ];
 
   dragPosition;
@@ -25,50 +26,49 @@ export class AppComponent {
   cardControls?: CardControl[];
   lockAxis?: any = 'x|y'
   @ViewChildren('resizeBox') resizeBox?: QueryList<ElementRef>;
+  @ViewChildren('dragHandleLT') dragHandleLT?: QueryList<ElementRef>;
+  @ViewChildren('dragHandleRT') dragHandleRT?: QueryList<ElementRef>;
+  @ViewChildren('dragHandleLB') dragHandleLB?: QueryList<ElementRef>;
   @ViewChildren('dragHandleRB') dragHandleRB?: QueryList<ElementRef>;
-  // @ViewChildren('dragHandleRight') dragHandleRight?: QueryList<ElementRef>;
-  // @ViewChildren('dragHandleBottom') dragHandleBottom?: QueryList<ElementRef>;
+
 
   constructor(private zone: NgZone) {
-    // this.controls = [];
     this.cardControls = [];
   }
 
   ngOnInit(): void {
     try {
-      const position = JSON.parse(localStorage.getItem('position'));
-      const defaultPosition = { x: 0, y: 0 }
-      this.dragPosition = (position) ? position : defaultPosition;
-      
-
       const cards = JSON.parse(localStorage.getItem('controls'));
-
-      this.controls = (cards) ? cards : [];
-
+      // this.controls = (cards) ? cards : [];
+      this.controls = [];
     } catch (e) {
 
     }
   }
 
+  ngAfterViewInit(): void {
+  }
 
-  counter = 0;
+
+
   addWatchlist(type: string): void {
-    const templateControl = new Control();
-    templateControl.width = (type === 'watchlist') ? 454 : 500;
-    templateControl.height = 349;
-    templateControl.xAxis = 0;
-    templateControl.yAxis = 0;
-    templateControl.cardType = type;
-    templateControl.dragFreePosition = {
-      x: 50,
-      y: 50
+    const tc = new Control();
+    tc.width = (type === 'watchlist') ? 300 : 500;
+    tc.height = 300;
+    tc.xAxis = 0;
+    tc.yAxis = 0;
+    tc.cardType = type;
+    tc.dragFreePosition = {
+      x: 0,
+      y: 0
     }
 
-    templateControl.index = this.controls === undefined ? 0 : this.controls.length;
+    tc.index = this.controls === undefined ? 0 : this.controls.length;
 
-    this.controls.push(templateControl);
-    this.selectedControl = templateControl;
+    this.controls.push(tc);
+    this.selectedControl = tc;
     this.setCreateHandleTransform();
+
   }
 
   setCreateHandleTransform(): void {
@@ -76,19 +76,11 @@ export class AppComponent {
     this.resizeBox!.changes.subscribe(() => {
       rect = this.resizeBox!.filter((element, index) => index === this.selectedControl!.index!)[0].nativeElement.getBoundingClientRect();
 
-      // console.warn(this.dragHandleRB)
+      this.setupContainerBoundary(rect.left, rect.top, 0, 0)
 
       this.dragHandleRB!.changes.subscribe(() => {
         this.setHandleTransform(this.dragHandleRB!.filter((element, index) => index === this.selectedControl!.index!)[0].nativeElement, rect, 'both');
       });
-
-      // this.dragHandleBottom!.changes.subscribe(() => {
-      //   this.setHandleTransform(this.dragHandleBottom!.filter((element, index) => index === this.selectedControl!.index!)[0].nativeElement, rect, 'y');
-      // });
-
-      // this.dragHandleRight!.changes.subscribe(() => {
-      //   this.setHandleTransform(this.dragHandleRight!.filter((element, index) => index === this.selectedControl!.index!)[0].nativeElement, rect, 'x');
-      // });
     });
   }
 
@@ -100,46 +92,59 @@ export class AppComponent {
   }
 
   resize(dragHandle: HTMLElement, target: HTMLElement): void {
-
-
     const dragRect = dragHandle.getBoundingClientRect();
     const targetRect = target.getBoundingClientRect();
 
-    // console.warn(dragRect);
-    // console.log(targetRect);
+    // console.table({
+    //   mouseX: this.mouse.x,
+    //   containerPosRight: this.containerPos.right,
+    //   mouseY: this.mouse.y,
+    //   containerPosBottom: this.containerPos.bottom,
+    //   boxLeft: this.boxPosition.left,
+    //   boxTop: this.boxPosition.top,
+    //   canResize: this.resizeCondMeet(),
+    // })
+    // console.warn(this.resizeCondMeet());
+    // // this.mouse.x < this.containerPos.right && this.mouse.y < this.containerPos.bottom
+    // if (this.resizeCondMeet()) {
+    //   const width = dragRect.left - targetRect.left + dragRect.width;
+    //   const height = dragRect.top - targetRect.top + dragRect.height;
+    //   target.style.width = width + 'px';
+    //   target.style.height = height + 'px';
 
-    
-    console.log(this.selectedControl.xAxis);
-    this.controls[this.selectedControl.index].xAxis = this.selectedControl.xAxis
-    this.controls[this.selectedControl.index].yAxis = this.selectedControl.yAxis
-
-
-    // console.log('&&&', this.selectedControl)
-
-    //this.selectedControl!.width = dragRect.left - targetRect.left + dragRect.width;
-    //this.selectedControl!.height = dragRect.top - targetRect.top + dragRect.height;
-
-    const width = dragRect.left - targetRect.left + dragRect.width;
-    const height = dragRect.top - targetRect.top + dragRect.height;
-
-    // if (width > 200 || height > 200) {
-    //   this.dragDisabled = true;
-    //   return;
+    //   this.setUpdateHandleTransform();
+    // } else {
+    //   // console.warn('no space left')
     // }
 
-    //this.selectedControl!.width = width;
-    //this.selectedControl!.height = height;
-    target.style.width = width + 'px';
-    target.style.height = height + 'px';
+    if (this.resizeCondMeet()) {
+      const width = dragRect.left - targetRect.left + dragRect.width;
+      const height = dragRect.top - targetRect.top + dragRect.height;
+      target.style.width = width + 'px';
+      target.style.height = height + 'px';
 
-    this.setUpdateHandleTransform();
+      this.setUpdateHandleTransform();
+    }
+
+  }
+
+  dragger(event: CdkDragEnd, control: Control) {
+    console.warn(this.resizeBox)
+    let i = control.index;
+    let aw: HTMLElement = this.resizeBox!.filter((element, index) => index === control.index!)[0].nativeElement;
+    this.controls[i].width = aw.getBoundingClientRect().width;
+    this.controls[i].height = aw.getBoundingClientRect().height;
+    localStorage.setItem("controls", JSON.stringify(this.controls));
+
+    const { left, top } = aw.getBoundingClientRect();
+
+    this.setupContainerBoundary(left, top, control.xAxis, control.yAxis);
   }
 
   dragEnd(event: CdkDragEnd, control: Control) {
     let aw: HTMLElement = this.resizeBox!.filter((element, index) => index === control.index!)[0].nativeElement;
-    console.log(aw.getBoundingClientRect());
+
     let i = control.index;
-    // const { offsetHeight, offsetWidth } = event.source.element.nativeElement;
     let { x, y } = event.source.getFreeDragPosition();
     this.controls[i].xAxis = x;
     this.controls[i].yAxis = y;
@@ -150,26 +155,80 @@ export class AppComponent {
       y: y
     }
 
-
-    // console.warn(this.controls)
-
     localStorage.setItem("controls", JSON.stringify(this.controls));
+  }
 
-    // this.dragPosition = { x: x, y: y };
-    // localStorage.setItem("position", JSON.stringify(this.dragPosition));
+
+  public mouse: { x: number, y: number }
+  private boxPosition: { left: number, top: number };
+  private containerPos: { left: number, top: number, right: number, bottom: number };
+
+  @HostListener('window:mousemove', ['$event'])
+  onMouseMove(event: MouseEvent) {
+    this.zone.runOutsideAngular(() => {
+      this.mouse = { x: event.clientX, y: event.clientY };
+    })
+    // if (this.status == 1) {
+    //   this.resizes();
+    // }
+    // this.mouse = { x: event.clientX, y: event.clientY };
+
+    // if(this.status === Status.RESIZE) this.resize();
+    // else if(this.status === Status.MOVE) this.move();
+  }
+
+  status = 0;
+  setStatus(event: MouseEvent, status: number) {
+    if (status === 1) {
+      this.status = status;
+
+      event.stopPropagation();
+    }
+  }
+
+  width = 300;
+  height = 300;
+  private resizes() {
+    if (this.resizeCondMeet()) {
+      this.width = Number(this.mouse.x > this.boxPosition.left) ? this.mouse.x - this.boxPosition.left : 0;
+      this.height = Number(this.mouse.y > this.boxPosition.top) ? this.mouse.y - this.boxPosition.top : 0;
+      console.warn(this.width, this.height)
+    }
+  }
+
+
+
+  private resizeCondMeet() {
+    return (this.mouse.x < this.containerPos.right && this.mouse.y < this.containerPos.bottom);
+  }
+
+
+  private setupContainerBoundary(clientBoundRectLeft, clientBoundRectTop, xAxis, yAxis) {
+
+    this.boxPosition = {
+      left: clientBoundRectLeft,
+      top: clientBoundRectTop
+    };
+
+    const left = this.boxPosition.left - xAxis;
+    const top = this.boxPosition.top - yAxis;
+    const right = left + 650;
+    const bottom = top + 400;
+
+    this.containerPos = { left, top, right, bottom };
   }
 
   clickControl(control: Control): void {
     this.selectedControl = control;
   }
 
-
   setUpdateHandleTransform(): void {
-    console.log('exppanding....')
+    // console.warn('called')
     const rect = this.resizeBox!.filter((element, index) => index === this.selectedControl!.index!)[0].nativeElement.getBoundingClientRect();
-    // this.setHandleTransform(this.dragHandleBottom!.filter((element, index) => index === this.selectedControl!.index!)[0].nativeElement, rect, 'y');
+    // this.setHandleTransform(this.dragHandleLT!.filter((element, index) => index === this.selectedControl!.index!)[0].nativeElement, rect, 'x');
+    // this.setHandleTransform(this.dragHandleRT!.filter((element, index) => index === this.selectedControl!.index!)[0].nativeElement, rect, 'both');
+    // this.setHandleTransform(this.dragHandleLB!.filter((element, index) => index === this.selectedControl!.index!)[0].nativeElement, rect, 'both');
     this.setHandleTransform(this.dragHandleRB!.filter((element, index) => index === this.selectedControl!.index!)[0].nativeElement, rect, 'both');
-    // this.setHandleTransform(this.dragHandleRight!.filter((element, index) => index === this.selectedControl!.index!)[0].nativeElement, rect, 'x');
 
   }
 

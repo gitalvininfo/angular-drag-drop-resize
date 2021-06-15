@@ -10,7 +10,7 @@
 
   <div style="width: 20%;">
     <p>Sidebar</p>
-    <div cdkDropList>
+    <div cdkDropList cdkDropListSortingDisabled="true">
 
       <div *ngFor="let c of sidebarCards" style="height: 150px; width: 150px; padding: 8px; margin: 8px;"
         class="example-box" (cdkDragDropped)="onDropList($event)" cdkDrag>
@@ -21,16 +21,17 @@
     </div>
   </div>
 
-  <div class="example-boundary">
+  <div class="example-boundary" cdkScrollable>
     <div class="container2" style="position: relative;">
 
       <!-- cdkDropListSortingDisabled="true" -->
 
-      <div *ngFor="let control of controls; let i = index" #resizeBox class="control-image example-box" cdkDrag
+      <div *ngFor="let control of controls; let i = index" 
+        #resizeBox class="control-image example-box" cdkDrag
         cdkDragBoundary=".example-boundary" [style.width.px]="control.width" [style.height.px]="control.height"
         [cdkDragFreeDragPosition]="control.dragFreePosition" (click)="clickControl(control)"
         (cdkDragEnded)="dragEnd($event, control)">
-      {{dragPosition | json}}
+        <!-- {{dragPosition | json}} -->
         <p>Card Type: {{control.cardType}}</p>
         <p>Width: {{control.width}}</p>
         <p>Height: {{control.height}}</p>
@@ -39,12 +40,25 @@
         <p>Drag Free: {{control.dragFreePosition | json}}</p>
         <p>Index: {{control.index}}</p>
 
+
+        <!-- <span #dragHandleLT cdkDragLockAxis="lockAxis" class="dragHandle lt" cdkDrag
+          (cdkDragMoved)="dragMove(dragHandleRB, $event, control)" (cdkDragEnded)="dragger(control)">
+        </span>
+
+        <span #dragHandleRT cdkDragLockAxis="lockAxis" class="dragHandle rt" cdkDrag
+          (cdkDragMoved)="dragMove(dragHandleRB, $event, control)" (cdkDragEnded)="dragger(control)">
+        </span>
+
+        <span #dragHandleLB cdkDragLockAxis="lockAxis" class="dragHandle lb" cdkDrag
+          (cdkDragMoved)="dragMove(dragHandleRB, $event, control)" (cdkDragEnded)="dragger(control)">
+        </span> -->
+
         <span #dragHandleRB cdkDragLockAxis="lockAxis" class="dragHandle rb" cdkDrag
-          (cdkDragMoved)="dragMove(dragHandleRB, $event, control)" (cdkDragEnded)="dragEnd($event, control)"></span>
-        <!-- <span #dragHandleBottom cdkDragLockAxis="y" class="dragHandle bottom" cdkDrag
-      (cdkDragMoved)="dragMove(dragHandleBottom, $event, control)" (cdkDragEnded)="dragEnd($event)"></span>
-    <span #dragHandleRight cdkDragLockAxis="x" class="dragHandle right" cdkDrag
-      (cdkDragMoved)="dragMove(dragHandleRight, $event, control)" (cdkDragEnded)="dragEnd($event)"></span> -->
+          (cdkDragMoved)="dragMove(dragHandleRB, $event, control)" (cdkDragEnded)="dragger($event, control)">
+        </span>
+
+    <!-- <div class="resize-action" (mousedown)="setStatus($event, 1)"></div> -->
+
 
       </div>
     </div>
